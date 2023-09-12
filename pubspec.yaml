@@ -21,3 +21,5 @@ flutter:
     platforms:
       windows:
         pluginClass: WebviewWindowsPlugin
+      macos:
+        pluginClass: WebviewWindowsPlugin
