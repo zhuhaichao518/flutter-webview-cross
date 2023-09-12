@@ -1,4 +1,4 @@
-name: webview_windows
+name: webview_cross
 description: A WebView2-powered webview implementation for the Windows platform.
 version: 0.3.0
 repository: https://github.com/jnschulze/flutter-webview-windows

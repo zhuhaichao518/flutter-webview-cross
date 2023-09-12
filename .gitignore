@@ -7,3 +7,6 @@
 build/
 
 pubspec.lock
+
+macos/Microsoft Edge WebView2.app
+macos/Framework/MSWebView2Experimental.framwork/
