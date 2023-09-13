@@ -5,9 +5,6 @@ import 'dart:async';
 import 'package:webview_windows/webview_windows.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'package:webview_windows/platformview_test.dart';
-import 'src/deformable_native_view.dart';
-
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -35,61 +32,6 @@ class _ExampleBrowser extends State<ExampleBrowser> {
   final _textController = TextEditingController();
   final List<StreamSubscription> _subscriptions = [];
   bool _isWebviewSuspended = false;
-
-  double opacity = 1.0;
-  double radius = 30;
-  double scale = 0.75;
-  double angle = 0;
-  double textAngle = 0;
-  bool forward = true;
-  // Hacked in hardcoded locations - extract location setting as methods and move to Dart.
-  final List<CoordinateRegion> _regions = const <CoordinateRegion>[
-    // Kyoto Gosho zoomed out.
-    CoordinateRegion(
-        center: Location(latitude: 35.02517, longitude: 135.76354),
-        latitudinalMeters: 1000000,
-        longitudinalMeters: 1000000),
-    // Kyoto Gosho zoomed in.
-    CoordinateRegion(
-        center: Location(latitude: 35.02517, longitude: 135.76354),
-        latitudinalMeters: 10000,
-        longitudinalMeters: 10000),
-    // Kyoto Gosho more zoomed in.
-    CoordinateRegion(
-        center: Location(latitude: 35.02517, longitude: 135.76354),
-        latitudinalMeters: 1000,
-        longitudinalMeters: 1000),
-    // Kyoto Gosho zoomed out.
-    CoordinateRegion(
-        center: Location(latitude: 34.98538, longitude: 135.76320),
-        latitudinalMeters: 10000,
-        longitudinalMeters: 10000),
-    // Osaka-jou zoomed out.
-    CoordinateRegion(
-        center: Location(
-            latitude: 34.687602115847326, longitude: 135.5263715730193),
-        latitudinalMeters: 10000,
-        longitudinalMeters: 10000),
-    // Osaka-jou zoomed out.
-    CoordinateRegion(
-        center: Location(
-            latitude: 34.687602115847326, longitude: 135.5263715730193),
-        latitudinalMeters: 3000,
-        longitudinalMeters: 3000),
-    // Osaka-jou zoomed out.
-    CoordinateRegion(
-        center: Location(
-            latitude: 34.687602115847326, longitude: 135.5263715730193),
-        latitudinalMeters: 10000,
-        longitudinalMeters: 10000),
-    // Osaka-jou zoomed out.
-    CoordinateRegion(
-        center: Location(
-            latitude: 34.687602115847326, longitude: 135.5263715730193),
-        latitudinalMeters: 100000,
-        longitudinalMeters: 100000),
-  ];
-  int _region = 0;
 
   @override
   void initState() {
@@ -204,16 +146,9 @@ class _ExampleBrowser extends State<ExampleBrowser> {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Stack(
                       children: [
-                        //Webview(
-                        //  _controller,
-                        //  permissionRequested: _onPermissionRequested,
-                        //),
-                        DeformableNativeView(
-                          angle: -4 * 3.1415926 / 180 * angle,
-                          opacity: opacity,
-                          radius: radius,
-                          scale: scale,
-                          child: MapView(region: _regions[_region]),
+                        Webview(
+                          _controller,
+                          permissionRequested: _onPermissionRequested,
                         ),
                         StreamBuilder<LoadingState>(
                             stream: _controller.loadingState,
