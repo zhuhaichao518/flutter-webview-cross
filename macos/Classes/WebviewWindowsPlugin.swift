@@ -32,7 +32,7 @@ class MapViewFactory: NSObject, FlutterPlatformViewFactory {
 }
 
 class MapView: NSView {
-  var mapView: MKMapView?
+  var mapView: NSView?
   var webView2Wrapper = WebView2Wrapper()
   init(
     frame: CGRect,
@@ -44,7 +44,7 @@ class MapView: NSView {
     super.wantsLayer = true
     super.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-    mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+    mapView = NSView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
 
     let channelName = "bracken.jp/mapview_macos_\(viewId)"
     let channel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger!)
@@ -53,15 +53,15 @@ class MapView: NSView {
       self?.handle(call, result: result)
     })
       
-    if var arguments = args as? [String: Any] {
-      arguments["animated"] = false
-      handleSetRegion(arguments)
-    }
+    //if var arguments = args as? [String: Any] {
+    //  arguments["animated"] = false
+    //  handleSetRegion(arguments)
+    //}
     super.addSubview(mapView!)
-    NSLayoutConstraint.activate([
-      mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-      mapView!.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-    ])
+    //NSLayoutConstraint.activate([
+    //  mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+    //  mapView!.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+    //])
     //WebView2Wrapper().initWebView(self);
   }
 
@@ -78,6 +78,7 @@ class MapView: NSView {
         let args = call.arguments as! [String: Any]
         handleSetRegion(args)
       case "initialize":
+        //todo: maybe we can use mapView as a bridge?
         webView2Wrapper.initWebView(self)
       case "navigate":
         webView2Wrapper.navigate()
@@ -96,7 +97,7 @@ class MapView: NSView {
       latitudinalMeters: args["latitudinalMeters"] as! Double,
       longitudinalMeters: args["longitudinalMeters"] as! Double)
     let animated = args["animated"] as! Bool
-    mapView?.setRegion(region, animated: animated)
+    //mapView?.setRegion(region, animated: animated)
   }
 }
 

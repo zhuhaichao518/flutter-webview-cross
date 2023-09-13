@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'dart:io' show Platform;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -604,6 +605,8 @@ class _WebviewState extends State<Webview> {
 
   StreamSubscription? _cursorSubscription;
 
+  MethodChannel? macoschannel;
+
   @override
   void initState() {
     super.initState();
@@ -640,7 +643,7 @@ class _WebviewState extends State<Webview> {
           return true;
         },
         child: SizeChangedLayoutNotifier(
-            child: _controller.value.isInitialized
+            child: (Platform.isMacOS | _controller.value.isInitialized)
                 ? Listener(
                     onPointerHover: (ev) {
                       // ev.kind is for whatever reason not set to touch
@@ -710,12 +713,22 @@ class _WebviewState extends State<Webview> {
                     },
                     child: MouseRegion(
                         cursor: _cursor,
-                        child: Texture(
-                          textureId: _controller._textureId,
-                          filterQuality: widget.filterQuality,
-                        )),
+                        child: Platform.isWindows
+                            ? Texture(
+                                textureId: _controller._textureId,
+                                filterQuality: widget.filterQuality,
+                              )
+                            : AppKitView(
+                                viewType: '@views/mapview-view-type',
+                                onPlatformViewCreated: _onPlatformViewCreated)),
                   )
                 : const SizedBox()));
+  }
+
+  void _onPlatformViewCreated(int viewId) {
+    macoschannel = MethodChannel('bracken.jp/mapview_macos_$viewId');
+    //it is to early to call this here because this view is not ready(attached to NSwindow) for creating controller.
+    //macoschannel?.invokeMethod('viewcreated');
   }
 
   void _reportSurfaceSize() async {
