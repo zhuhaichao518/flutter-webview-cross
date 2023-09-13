@@ -9,4 +9,4 @@ build/
 pubspec.lock
 
 macos/Microsoft Edge WebView2.app
-macos/Framework
+macos/Frameworks

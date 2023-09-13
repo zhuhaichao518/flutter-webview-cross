@@ -23,7 +23,7 @@
         stringByStandardizingPath];
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *sourcePath = @"/Users/zhuhaichao/development/webview_windows/macos/Frameworks/Microsoft Edge WebView2.app";
+    NSString *sourcePath = @"/Users/lichenliu/Documents/github_repo/flutter-webview-cross/macos/Microsoft Edge WebView2.app";
     NSString *destinationPath = librariesPath;
     NSError *error;
     if ([fileManager createDirectoryAtPath:destinationPath withIntermediateDirectories:YES attributes:nil error:&error]) {

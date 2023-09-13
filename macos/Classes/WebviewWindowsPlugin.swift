@@ -12,8 +12,8 @@ public class WebviewWindowsPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-    //case "initialize":
-      //webView2Wrapper.initWebView()
+    case "initialize":
+      webView2Wrapper.initWebView()
     case "navigate":
       webView2Wrapper.navigate()
     case "getPlatformVersion":
