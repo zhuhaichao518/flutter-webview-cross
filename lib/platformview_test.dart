@@ -12,6 +12,10 @@ class MapView extends StatefulWidget {
 
   @override
   State createState() => _MapViewState();
+
+  //void initwebview() {
+  //  MapViewPlatform.instance.setRegion(_mapId, widget.region, animated: true);
+  //}
 }
 
 class _MapViewState extends State<MapView> {
