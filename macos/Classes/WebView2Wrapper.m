@@ -17,7 +17,7 @@
     NSLog(@"Hello, World!");
 }
 
-- (void)initWebView {
+- (void)initWebView:(NSView *)view {
     NSString* librariesPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents/Libraries"];
     NSString* browserApplicationPath = [[NSString stringWithFormat:@"%@/%@", librariesPath, @"Microsoft Edge WebView2.app"]
         stringByStandardizingPath];
@@ -44,8 +44,8 @@
             } else {
               NSLog(@"Create webview environment successfully");
               self.environment = environment;
-              NSArray<NSWindow*>* windows = [NSApp windows];
-              NSView* view = [windows[0] contentView];
+              //NSArray<NSWindow*>* windows = [NSApp windows];
+              //NSView* view = [windows[0] contentView];
               [environment createWebViewController:view
                                           options:nil
                                 completionHandler:^(MSWebView2Controller* controller, NSError* error) {

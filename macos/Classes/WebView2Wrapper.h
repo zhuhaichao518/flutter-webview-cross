@@ -11,7 +11,7 @@
 @interface WebView2Wrapper : NSObject
 
 - (void)printHello;
-- (void)initWebView;
+- (void)initWebView:(NSView*)view;
 - (void)navigate;
 
 @property (nonatomic, strong) NSString *name;
