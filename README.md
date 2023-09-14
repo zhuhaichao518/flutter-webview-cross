@@ -1,4 +1,6 @@
 # webview_macos is under development.
+This sample is currently not runnable for mac because  Microsoft Edge WebView2 (for Mac) sdk is not released. We expect it runnable when WebView2 for mac is released.
+
 # webview_windows
 
 [![CI](https://github.com/jnschulze/flutter-webview-windows/actions/workflows/ci.yml/badge.svg)](https://github.com/jnschulze/flutter-webview-windows/actions/workflows/ci.yml)
