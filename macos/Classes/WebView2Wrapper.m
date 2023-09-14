@@ -66,10 +66,10 @@
 
 }
 
-- (void)navigate {
+- (void)navigate:(NSString*)URI {
   if (self.webview) {
     NSLog(@"start navigate");
-    [self.webview navigate:@"https://www.bing.com"];
+    [self.webview navigate:URI];
   } else {
     NSLog(@"self.webview is not initialized");
   }

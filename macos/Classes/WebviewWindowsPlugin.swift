@@ -130,7 +130,10 @@ class MapView: NSView {
       case "resize":
         super.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
       case "navigation":
-        webView2Wrapper.navigate()
+        if let args = call.arguments as? [String:Any],
+           let url = args["url"] as? String{
+            webView2Wrapper.navigate(url)
+        }
       case "pointerdown":
         if let args = call.arguments as? [String:Any],
            let x = args["dx"] as? CGFloat,

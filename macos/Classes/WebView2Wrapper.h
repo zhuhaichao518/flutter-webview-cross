@@ -13,7 +13,7 @@
 - (void)printHello;
 - (void)initEnvironment;
 - (void)initWebView:(NSView*)view;
-- (void)navigate;
+- (void)navigate:(NSString*)URI;
 - (void)dealloc;
 
 @property (nonatomic, strong) NSString *name;

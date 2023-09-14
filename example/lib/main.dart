@@ -125,7 +125,9 @@ class _ExampleBrowser extends State<ExampleBrowser> {
                     controller: _textController,
                     onSubmitted: (val) {
                       //_controller.loadUrl(val);
-                      channel.invokeMethod("navigation");
+                      channel.invokeMethod("navigation", {
+                        'url': val,
+                      });
                     },
                   ),
                 ),
