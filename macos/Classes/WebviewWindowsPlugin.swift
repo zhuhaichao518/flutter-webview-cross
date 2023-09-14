@@ -2,6 +2,8 @@ import Cocoa
 import FlutterMacOS
 import MapKit
 
+var webView2Wrapper = WebView2Wrapper()
+
 class MapViewFactory: NSObject, FlutterPlatformViewFactory {
   private var messenger: FlutterBinaryMessenger
 
@@ -32,8 +34,10 @@ class MapViewFactory: NSObject, FlutterPlatformViewFactory {
 }
 
 class MapView: NSView {
-  var mapView: NSView?
-  var webView2Wrapper = WebView2Wrapper()
+  var mapView: NSView?//MKMapView?//NSView?
+    var mapView2: MKMapView?//M
+    var inited = false
+  //var webView2Wrapper = WebView2Wrapper()
   init(
     frame: CGRect,
     viewIdentifier viewId: Int64,
@@ -42,10 +46,10 @@ class MapView: NSView {
   ) {
     super.init(frame: frame)
     super.wantsLayer = true
-    super.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+    super.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 
     mapView = NSView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-
+    super.layer?.backgroundColor = NSColor.black.cgColor;
     let channelName = "bracken.jp/mapview_macos_\(viewId)"
     let channel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger!)
     channel.setMethodCallHandler({
@@ -57,14 +61,34 @@ class MapView: NSView {
     //  arguments["animated"] = false
     //  handleSetRegion(arguments)
     //}
-    super.addSubview(mapView!)
+    //super.addSubview(mapView!)
+      mapView2 = MKMapView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+      //super.addSubview(mapView2!)
     //NSLayoutConstraint.activate([
     //  mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
     //  mapView!.trailingAnchor.constraint(equalTo: self.trailingAnchor),
     //])
     //WebView2Wrapper().initWebView(self);
   }
+    override var frame:NSRect{
+        didSet{
+            let children = self.subviews
+            children.first?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height);
+            print("New frame is:\(frame)");
+        }
+    }
 
+    override func viewDidMoveToWindow() {
+        //super.viewDidMoveToWindow()
+        if self.window != nil  && inited == false {
+            webView2Wrapper.initWebView(self)
+            inited = true
+        }
+    }
+    
+    override func resize(withOldSuperviewSize oldSize:NSSize){
+        super.resize(withOldSuperviewSize: oldSize)
+    }
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     super.wantsLayer = true
@@ -77,10 +101,12 @@ class MapView: NSView {
       case "setRegion":
         let args = call.arguments as! [String: Any]
         handleSetRegion(args)
-      case "initialize":
+      //case "initialize":
         //todo: maybe we can use mapView as a bridge?
-        webView2Wrapper.initWebView(self)
-      case "navigate":
+        //webView2Wrapper.initWebView(self)
+      case "resize":
+        super.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+      case "navigation":
         webView2Wrapper.navigate()
       default:
         result(FlutterMethodNotImplemented)
@@ -109,7 +135,8 @@ public class WebviewWindowsPlugin: NSObject, FlutterPlugin {
       
     let channel = FlutterMethodChannel(name: "io.jns.webview.win", binaryMessenger: registrar.messenger)
     let instance = WebviewWindowsPlugin()
-    
+      
+    webView2Wrapper.initEnvironment()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

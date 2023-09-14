@@ -599,7 +599,7 @@ class _WebviewState extends State<Webview> {
 
   PointerDeviceKind _pointerKind = PointerDeviceKind.unknown;
 
-  MouseCursor _cursor = SystemMouseCursors.basic;
+  //MouseCursor _cursor = SystemMouseCursors.basic;
 
   WebviewController get _controller => widget.controller;
 
@@ -611,6 +611,7 @@ class _WebviewState extends State<Webview> {
   void initState() {
     super.initState();
 
+    if (Platform.isMacOS) return;
     // TODO: Refactor callback and event handling and
     // remove this line
     _controller._permissionRequested = widget.permissionRequested;
@@ -620,7 +621,7 @@ class _WebviewState extends State<Webview> {
 
     _cursorSubscription = _controller._cursor.listen((cursor) {
       setState(() {
-        _cursor = cursor;
+        //_cursor = cursor;
       });
     });
   }
@@ -648,6 +649,7 @@ class _WebviewState extends State<Webview> {
                     onPointerHover: (ev) {
                       // ev.kind is for whatever reason not set to touch
                       // even on touch input
+                      if (Platform.isMacOS) return;
                       if (_pointerKind == PointerDeviceKind.touch) {
                         // Ignoring hover events on touch for now
                         return;
@@ -655,6 +657,7 @@ class _WebviewState extends State<Webview> {
                       _controller._setCursorPos(ev.localPosition);
                     },
                     onPointerDown: (ev) {
+                      if (Platform.isMacOS) return;
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
                         _controller._setPointerUpdate(
@@ -670,6 +673,7 @@ class _WebviewState extends State<Webview> {
                       _controller._setPointerButtonState(button, true);
                     },
                     onPointerUp: (ev) {
+                      if (Platform.isMacOS) return;
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
                         _controller._setPointerUpdate(
@@ -686,6 +690,7 @@ class _WebviewState extends State<Webview> {
                       }
                     },
                     onPointerCancel: (ev) {
+                      if (Platform.isMacOS) return;
                       _pointerKind = ev.kind;
                       final button = _downButtons.remove(ev.pointer);
                       if (button != null) {
@@ -693,6 +698,7 @@ class _WebviewState extends State<Webview> {
                       }
                     },
                     onPointerMove: (ev) {
+                      if (Platform.isMacOS) return;
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
                         _controller._setPointerUpdate(
@@ -706,13 +712,14 @@ class _WebviewState extends State<Webview> {
                       }
                     },
                     onPointerSignal: (signal) {
+                      if (Platform.isMacOS) return;
                       if (signal is PointerScrollEvent) {
                         _controller._setScrollDelta(
                             -signal.scrollDelta.dx, -signal.scrollDelta.dy);
                       }
                     },
-                    child: MouseRegion(
-                        cursor: _cursor,
+                    child: SizedBox(
+                        //cursor: SystemMouseCursors.basic,
                         child: Platform.isWindows
                             ? Texture(
                                 textureId: _controller._textureId,

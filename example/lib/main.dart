@@ -106,68 +106,73 @@ class _ExampleBrowser extends State<ExampleBrowser> {
         ),
       );
     } else {*/
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        children: [
-          Card(
-            elevation: 0,
-            child: Row(children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'URL',
-                    contentPadding: EdgeInsets.all(10.0),
+    return MouseRegion(
+      cursor: SystemMouseCursors.basic,
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Card(
+              elevation: 0,
+              child: Row(children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'URL',
+                      contentPadding: EdgeInsets.all(10.0),
+                    ),
+                    textAlignVertical: TextAlignVertical.center,
+                    controller: _textController,
+                    onSubmitted: (val) {
+                      //_controller.loadUrl(val);
+                      channel.invokeMethod("navigation");
+                    },
                   ),
-                  textAlignVertical: TextAlignVertical.center,
-                  controller: _textController,
-                  onSubmitted: (val) {
-                    _controller.loadUrl(val);
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  splashRadius: 20,
+                  onPressed: () {
+                    _controller.reload();
+                    //channel.invokeMethod("resize");
                   },
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.refresh),
-                splashRadius: 20,
-                onPressed: () {
-                  _controller.reload();
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.developer_mode),
-                tooltip: 'Open DevTools',
-                splashRadius: 20,
-                onPressed: () {
-                  //_controller.openDevTools();
-                  channel.invokeMethod("initialize");
-                },
-              )
-            ]),
-          ),
-          Expanded(
-              child: Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Stack(
-                    children: [
-                      Webview(
-                        _controller,
-                        permissionRequested: _onPermissionRequested,
-                      ),
-                      StreamBuilder<LoadingState>(
-                          stream: _controller.loadingState,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData &&
-                                snapshot.data == LoadingState.loading) {
-                              return LinearProgressIndicator();
-                            } else {
-                              return SizedBox();
-                            }
-                          }),
-                    ],
-                  ))),
-        ],
+                IconButton(
+                  icon: Icon(Icons.developer_mode),
+                  tooltip: 'Open DevTools',
+                  splashRadius: 20,
+                  onPressed: () {
+                    //_controller.openDevTools();
+                    //channel.invokeMethod("initialize");
+                  },
+                ),
+              ]),
+            ),
+            Expanded(
+                child: Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Stack(
+                      children: [
+                        Webview(
+                          _controller,
+                          permissionRequested: _onPermissionRequested,
+                        ),
+                        StreamBuilder<LoadingState>(
+                            stream: _controller.loadingState,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data == LoadingState.loading) {
+                                return LinearProgressIndicator();
+                              } else {
+                                return SizedBox();
+                              }
+                            }),
+                      ],
+                    ))),
+          ],
+        ),
       ),
     );
     // }
@@ -195,7 +200,7 @@ class _ExampleBrowser extends State<ExampleBrowser> {
         stream: _controller.title,
         builder: (context, snapshot) {
           return Text(
-              snapshot.hasData ? snapshot.data! : 'WebView (Windows) Example');
+              snapshot.hasData ? snapshot.data! : 'WebView (Cross) Example');
         },
       )),
       body: Center(

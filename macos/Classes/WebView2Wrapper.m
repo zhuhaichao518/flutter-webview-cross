@@ -18,6 +18,21 @@
 }
 
 - (void)initWebView:(NSView *)view {
+    [self.environment createWebViewController:view
+                                options:nil
+                      completionHandler:^(MSWebView2Controller* controller, NSError* error) {
+                            if (error) {
+                              NSLog(@"Create webview controller failed with error: %@", error);
+                            } else {
+                              NSLog(@"Create webview controller successfully");
+                              self.controller = controller;
+                              self.webview = controller.webview;
+                              [self.webview navigate:@"https://www.bilibili.com"];
+                            }
+                      }];
+}
+
+- (void)initEnvironment {
     NSString* librariesPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents/Libraries"];
     NSString* browserApplicationPath = [[NSString stringWithFormat:@"%@/%@", librariesPath, @"Microsoft Edge WebView2.app"]
         stringByStandardizingPath];
@@ -46,18 +61,6 @@
               self.environment = environment;
               //NSArray<NSWindow*>* windows = [NSApp windows];
               //NSView* view = [windows[0] contentView];
-              [environment createWebViewController:view
-                                          options:nil
-                                completionHandler:^(MSWebView2Controller* controller, NSError* error) {
-                                      if (error) {
-                                        NSLog(@"Create webview controller failed with error: %@", error);
-                                      } else {
-                                        NSLog(@"Create webview controller successfully");
-                                        self.controller = controller;
-                                        self.webview = controller.webview;
-                                        [self.webview navigate:@"https://www.bing.com"];
-                                      }
-                                }];
             }
         });
 
@@ -70,6 +73,10 @@
   } else {
     NSLog(@"self.webview is not initialized");
   }
+}
+
+- (void)dealloc {
+    _name = @"sb";
 }
 
 // 实现name属性的setter和getter方法
