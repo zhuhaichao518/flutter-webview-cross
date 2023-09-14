@@ -657,7 +657,13 @@ class _WebviewState extends State<Webview> {
                       _controller._setCursorPos(ev.localPosition);
                     },
                     onPointerDown: (ev) {
-                      if (Platform.isMacOS) return;
+                      if (Platform.isMacOS) {
+                        macoschannel!.invokeMethod('pointerdown', {
+                          'dx': ev.localPosition.dx,
+                          'dy': ev.localPosition.dy
+                        });
+                        return;
+                      }
                       _pointerKind = ev.kind;
                       if (ev.kind == PointerDeviceKind.touch) {
                         _controller._setPointerUpdate(

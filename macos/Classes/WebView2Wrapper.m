@@ -75,6 +75,15 @@
   }
 }
 
+/*- (void)close {
+    if (self.webview) {
+      NSLog(@"webview close");
+      //[self.webview ];
+    } else {
+      NSLog(@"self.webview is not initialized");
+    }
+}*/
+
 - (void)dealloc {
     _name = @"sb";
 }

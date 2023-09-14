@@ -1,6 +1,8 @@
 import Cocoa
 import FlutterMacOS
 import MapKit
+import AppKit
+import CoreGraphics
 
 var webView2Wrapper = WebView2Wrapper()
 
@@ -46,10 +48,10 @@ class MapView: NSView {
   ) {
     super.init(frame: frame)
     super.wantsLayer = true
-    super.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+    super.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-    mapView = NSView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-    super.layer?.backgroundColor = NSColor.black.cgColor;
+    //mapView = NSView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+    //super.layer?.backgroundColor = NSColor.black.cgColor;
     let channelName = "bracken.jp/mapview_macos_\(viewId)"
     let channel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger!)
     channel.setMethodCallHandler({
@@ -62,7 +64,7 @@ class MapView: NSView {
     //  handleSetRegion(arguments)
     //}
     //super.addSubview(mapView!)
-      mapView2 = MKMapView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+      //mapView2 = MKMapView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
       //super.addSubview(mapView2!)
     //NSLayoutConstraint.activate([
     //  mapView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -75,11 +77,32 @@ class MapView: NSView {
             let children = self.subviews
             children.first?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height);
             print("New frame is:\(frame)");
+
+
+            //CGWheelCount wheelCount = 2; // 1 for Y-only, 2 for Y-X, 3 for Y-X-Z
+            //int32_t xScroll = −1; // Negative for right
+            //int32_t yScroll = −2; // Negative for down
+            //CGEventRef cgEvent = CGEventCreateScrollWheelEvent(NULL, kCGScrollEventUnitLine, wheelCount, yScroll, xScroll);
+
+            // You can post the CGEvent to the event stream to have it automatically sent to the window under the cursor
+            //CGEventPost(kCGHIDEventTap, cgEvent);
+
+            //NSEvent *theEvent = [NSEvent eventWithCGEvent:cgEvent];
+            //CFRelease(cgEvent);
+
+            // Or you can send the NSEvent directly to a view
+            //[children.first? scrollWheel:theEvent];
+
+            //children.first?.interpretKeyEvents([scrollEvent])
+            //setNeedsDisplay(NSRect(x:0,y:0,width: self.frame.width, height: self.frame.height));
+            //super.layoutSubtreeIfNeeded()
+            //self.needsLayout = false;
+            //self.layout()
         }
     }
 
     override func viewDidMoveToWindow() {
-        //super.viewDidMoveToWindow()
+        super.viewDidMoveToWindow()
         if self.window != nil  && inited == false {
             webView2Wrapper.initWebView(self)
             inited = true
@@ -108,6 +131,19 @@ class MapView: NSView {
         super.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
       case "navigation":
         webView2Wrapper.navigate()
+      case "pointerdown":
+        if let args = call.arguments as? [String:Any],
+           let x = args["dx"] as? CGFloat,
+           let y = args["dy"] as? CGFloat{
+            var mouseLocation = NSEvent.mouseLocation
+            mouseLocation.x = x
+            mouseLocation.y = y
+            let mouseEvent = NSEvent.mouseEvent(with: .leftMouseDown, location: mouseLocation, modifierFlags: [], timestamp: TimeInterval(), windowNumber: 0, context: nil, eventNumber: 0, clickCount: 1, pressure: 1.0)
+            
+            self.subviews.first?.mouseDown(with: mouseEvent!)
+        }
+      //case "scrollup":
+         
       default:
         result(FlutterMethodNotImplemented)
       }
