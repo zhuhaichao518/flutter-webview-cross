@@ -15,7 +15,7 @@ set(PLUGIN_NAME "webview_windows_plugin")
 set(NUGET_URL https://dist.nuget.org/win-x86-commandline/v5.10.0/nuget.exe)
 set(NUGET_SHA256 852b71cc8c8c2d40d09ea49d321ff56fd2397b9d6ea9f96e532530307bbbafd3)
 
-find_program(NUGET nuget)
+find_program(NUGET nuget C:\dev\New folder\webview1\webviewtest\flutter_application_1\build\windows\x64)
 if(NOT NUGET)
   message(NOTICE "Nuget is not installed.")
   set(NUGET ${CMAKE_BINARY_DIR}/nuget.exe)
