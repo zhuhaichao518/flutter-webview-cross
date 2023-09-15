@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:webview_windows/webview_windows.dart';
 import 'package:window_manager/window_manager.dart';
@@ -40,7 +41,9 @@ class _ExampleBrowser extends State<ExampleBrowser> {
   @override
   void initState() {
     super.initState();
-    //initPlatformState();
+    if (Platform.isWindows) {
+      initPlatformState();
+    }
   }
 
   Future<void> initPlatformState() async {
@@ -124,10 +127,13 @@ class _ExampleBrowser extends State<ExampleBrowser> {
                     textAlignVertical: TextAlignVertical.center,
                     controller: _textController,
                     onSubmitted: (val) {
-                      //_controller.loadUrl(val);
-                      channel.invokeMethod("navigation", {
-                        'url': val,
-                      });
+                      if (Platform.isWindows) {
+                        _controller.loadUrl(val);
+                      } else {
+                        channel.invokeMethod("navigation", {
+                          'url': val,
+                        });
+                      }
                     },
                   ),
                 ),
